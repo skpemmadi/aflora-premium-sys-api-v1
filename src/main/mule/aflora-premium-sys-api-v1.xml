@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="2ff627b2-6ede-4ebd-93d3-995d1588c788" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="aflora-premium-sys-api-v1Flow" doc:id="98c20c19-2d7e-411c-9efe-32b3918b4c26" >
+		<http:listener doc:name="Listener" doc:id="454a2e8e-488d-44db-9b43-0ec511ba29dd" config-ref="HTTP_Listener_config" path="/premium"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ca0acccc-3b50-48e7-a847-76e3d69753cc" message="#[payload]"/>
+		<http:request method="POST" doc:name="Request" doc:id="94650703-19e2-42fc-8fa4-5018c68a1989" url="https://bzfl1bafzl.execute-api.us-east-1.amazonaws.com/dev/api/v1/premium/calculate"/>
+		<ee:transform doc:name="Transform Message" doc:id="7be1cf9f-500e-410c-9c49-e9ba2ce980b0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
